@@ -34,7 +34,7 @@ for repo in selected:
         if args.action not in scripts: continue
         command = ['npm', 'run', args.action]
     elif args.action == 'install': command = ['npm', 'ci']
-    else: command = ['npm', 'install', f'@euiyun/book@github:geniuskey/book#{args.ref}']
+    else: command = ['npm', 'install', f'@euiyun/book@https://codeload.github.com/geniuskey/book/tar.gz/refs/tags/{args.ref}']
     print(f'[{repo.name}] {" ".join(command)}', flush=True)
     if subprocess.run(command, cwd=repo).returncode: failed.append(repo.name)
 if failed:

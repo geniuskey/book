@@ -7,7 +7,7 @@
     "test": "euiyun-book build"
   },
   "dependencies": {
-    "@euiyun/book": "git+https://github.com/geniuskey/book.git#v0.1.1"
+    "@euiyun/book": "https://codeload.github.com/geniuskey/book/tar.gz/refs/tags/v0.1.2"
   },
   "engines": {
     "node": ">=20"
