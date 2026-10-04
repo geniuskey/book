@@ -1,0 +1,8 @@
+{
+  "id": "newbook",
+  "title": "NewBook",
+  "description": "새 책의 소개를 입력하세요.",
+  "domain": "newbook.euiyun.com",
+  "field": "semiconductor",
+  "status": "writing"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "newbook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "euiyun-book build",
+    "test": "euiyun-book build"
+  },
+  "dependencies": {
+    "@euiyun/book": "github:geniuskey/book#v0.1.0"
+  },
+  "engines": { "node": ">=20" }
+}
