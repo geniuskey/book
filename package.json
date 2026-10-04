@@ -11,11 +11,15 @@
     ".": "./src/build.js"
   },
   "scripts": {
-    "test": "node --test",
-    "build": "node --test"
+    "test": "node --test test/*.test.js",
+    "build": "node --test test/*.test.js",
+    "test:browser": "playwright test"
   },
   "engines": {
     "node": ">=20"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
 }

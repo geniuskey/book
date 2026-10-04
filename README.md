@@ -10,6 +10,7 @@
 - 누락된 canonical, OpenGraph, Twitter card, 기본 JSON-LD, favicon 메타 채움
 - 없을 때 sitemap과 robots.txt 생성
 - 기존 CSS, JavaScript, 시뮬레이터, 고유 SEO 메타, 자산, URL 유지
+- 공개된 모든 책의 모바일 홈·시뮬레이터 진입점과 대표 3권의 실제 조작을 검사하는 Playwright suite
 
 ## 새 책
 

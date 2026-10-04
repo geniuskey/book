@@ -13,7 +13,18 @@ python3 book/scripts/manage-books.py verify
 python3 book/scripts/manage-books.py build --repo processbook
 ```
 
-`catalog`는 포털 출간 항목과 로컬 `book.json`의 ID·제목·설명·도메인·분야·상태가 일치하는지 확인한다. `verify`는 실제 공개 홈페이지와 첫 챕터의 Analytics beacon을 확인한다. 브라우저에서 시뮬레이터를 직접 조작하는 검수는 별도로 해야 한다.
+`catalog`는 포털 출간 항목과 로컬 `book.json`의 ID·제목·설명·도메인·분야·상태가 일치하는지 확인한다. `verify`는 실제 공개 홈페이지와 첫 챕터의 Analytics beacon을 확인한다.
+
+## 공개 사이트 브라우저 검사
+
+```sh
+cd book
+npm ci
+npx playwright install chromium
+npm run test:browser
+```
+
+Playwright는 포털의 공개 catalog와 실험 목록을 읽어 출간된 모든 책의 모바일 홈, 시뮬레이터 진입점, 브라우저 오류를 확인한다. ProcessBook 클린룸, AIBook 어텐션, ColorBook 등색 실험은 실제 조작 후 값 변화를 검사한다. 나머지 책의 실험 검사도 대표 진입점과 컨트롤 렌더링까지 확인한다. `book` 저장소의 GitHub Actions는 매일 한 번, 관련 코드가 `main`에 푸시될 때, 수동 실행 시 같은 검사를 한다. 실패 시 `browser-smoke-failure` artifact에 스크린샷과 trace가 남는다. 포털 목록에 새 책을 출간하면 실험 URL도 `discovery.json`에 등록하거나 브라우저 검사에서 해당 책의 진입점을 지정한다.
 
 ## 엔진 릴리스
 
