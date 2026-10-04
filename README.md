@@ -17,7 +17,7 @@
 
 ## 기존 책
 
-`book.json`과 `package.json`을 추가하고 `@euiyun/book`의 고정 버전을 설치한다. `npm run build` 후 기존 루트 사이트와 `.book-dist/`의 페이지·자산·시뮬레이터를 비교한다. `packagingbook`이 첫 파일럿이다. 배포 방식 변경 전까지 기존 `main` 루트 Pages가 그대로 작동한다.
+`book.json`과 `package.json`을 추가하고 `@euiyun/book`의 고정 버전을 설치한다. `npm run build` 후 기존 루트 사이트와 `.book-dist/`의 페이지·자산·시뮬레이터를 비교한다. 기존 책 22권을 모두 Actions 기반 Pages 배포로 이전했다. 새 책도 같은 절차로 추가한다.
 
 ```sh
 npm ci
@@ -26,4 +26,4 @@ npm run build
 
 현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.1.2`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
 
-[아키텍처](docs/ARCHITECTURE.md) · [집필](docs/BOOK_AUTHORING.md) · [이전](docs/MIGRATION.md) · [Analytics](docs/ANALYTICS.md) · [감사 결과](docs/ECOSYSTEM_AUDIT.md)
+[아키텍처](docs/ARCHITECTURE.md) · [집필](docs/BOOK_AUTHORING.md) · [운영](docs/OPERATIONS.md) · [이전](docs/MIGRATION.md) · [Analytics](docs/ANALYTICS.md) · [감사 결과](docs/ECOSYSTEM_AUDIT.md)

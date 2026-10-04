@@ -54,3 +54,5 @@
 3. 현재 portal catalog는 `books/data/books.json`이다. 다음 단계에서는 각 repo의 `book.json`을 canonical metadata로 삼고 포털 catalog를 수집·검증으로 생성한다. 편집 정보(learning path, featured 등)는 portal에 남긴다.
 4. 단일 Analytics Site Token은 엔진의 한 파일에 둔다. 이것은 공개 Site Token이며 Cloudflare API Token이 아니다.
 5. Phase 1 조사 완료. Phase 2 정적 엔진 구현. Phase 3–4 `packagingbook` 파일럿. Phase 5 다수 책 이전 및 Phase 6 portal 자동 연동은 파일럿 검증 뒤 진행한다.
+
+> 2026-10-04 후속 작업: `colorbook`을 포털에 등록하고 `chipindustrybook`을 부모 디렉터리에 가져왔다. 출간 22권 모두 공통 엔진과 Actions 배포로 이전했다. 위 표와 발견은 이전 당시의 스냅샷이다.
