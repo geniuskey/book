@@ -24,6 +24,6 @@ npm ci
 npm run build
 ```
 
-현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.1.0`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
+현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.1.1`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
 
 [아키텍처](docs/ARCHITECTURE.md) · [집필](docs/BOOK_AUTHORING.md) · [이전](docs/MIGRATION.md) · [Analytics](docs/ANALYTICS.md) · [감사 결과](docs/ECOSYSTEM_AUDIT.md)

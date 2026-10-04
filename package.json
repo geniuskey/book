@@ -1,12 +1,21 @@
 {
   "name": "@euiyun/book",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Build and check independent static Euiyun books",
-  "bin": { "euiyun-book": "./bin/book.js" },
-  "exports": { ".": "./src/build.js" },
-  "scripts": { "test": "node --test", "build": "node --test" },
-  "engines": { "node": ">=20" },
+  "bin": {
+    "euiyun-book": "./bin/book.js"
+  },
+  "exports": {
+    ".": "./src/build.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "build": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "license": "MIT"
 }
