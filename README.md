@@ -6,7 +6,7 @@
 
 - `book.json`과 `CNAME`의 도메인 일치 검사
 - 원본을 건드리지 않고 `.book-dist/` 생성
-- 모든 HTML에 공통 Cloudflare Web Analytics beacon 한 개만 포함
+- 모든 HTML에 공통 GA4 태그(`G-LST8C5WL08`) 한 개만 포함
 - 누락된 canonical, OpenGraph, Twitter card, 기본 JSON-LD, favicon 메타 채움
 - 없을 때 sitemap과 robots.txt 생성
 - 기존 CSS, JavaScript, 시뮬레이터, 고유 SEO 메타, 자산, URL 유지
@@ -25,6 +25,6 @@ npm ci
 npm run build
 ```
 
-현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.1.2`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
+현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.1.3`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
 
 [아키텍처](docs/ARCHITECTURE.md) · [집필](docs/BOOK_AUTHORING.md) · [운영](docs/OPERATIONS.md) · [이전](docs/MIGRATION.md) · [Analytics](docs/ANALYTICS.md) · [감사 결과](docs/ECOSYSTEM_AUDIT.md)

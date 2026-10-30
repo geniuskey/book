@@ -4,10 +4,11 @@ import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { buildBook } from '../src/build.js'
+import { analyticsSource, analyticsTag, stripAnalytics } from '../src/analytics.js'
 
 const make = () => mkdtemp(join(tmpdir(), 'euiyun-book-'))
 
-test('build preserves the source and emits one beacon, SEO, sitemap and CNAME', async () => {
+test('build preserves the source and emits one GA4 tag, SEO, sitemap and CNAME', async () => {
   const root = await make()
   try {
     await mkdir(join(root, 'chapters'))
@@ -22,7 +23,9 @@ test('build preserves the source and emits one beacon, SEO, sitemap and CNAME', 
     assert.equal(result.pages, 2)
     assert.equal(await readFile(join(root, 'index.html'), 'utf8'), source)
     const output = await readFile(join(root, '.book-dist', 'index.html'), 'utf8')
-    assert.equal((output.match(/beacon\.min\.js/g) || []).length, 1)
+    assert.equal(output.split(analyticsSource).length - 1, 1)
+    assert.ok(output.includes("gtag('config', 'G-LST8C5WL08');"))
+    assert.ok(!output.includes('cloudflareinsights.com'))
     assert.match(output, /rel="canonical" href="https:\/\/testbook\.euiyun\.com\/"/)
     assert.match(output, /property="og:title"/)
     assert.match(output, /type="application\/ld\+json"/)
@@ -39,4 +42,11 @@ test('build rejects a domain mismatch', async () => {
     await writeFile(join(root, 'CNAME'), 'otherbook.euiyun.com')
     await assert.rejects(buildBook(root), /differs/)
   } finally { await rm(root, { recursive: true, force: true }) }
+})
+
+test('analytics normalization removes legacy and current tags before reinsertion', () => {
+  const legacy = '<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token":"old"}\'></script><!-- End Cloudflare Web Analytics -->'
+  const html = `<head>${legacy}${analyticsTag}${analyticsTag}</head>`
+  assert.equal(stripAnalytics(html), '<head></head>')
+  assert.equal(stripAnalytics(`<head>${analyticsTag}</head>`), '<head></head>')
 })

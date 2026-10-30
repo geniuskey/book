@@ -1,10 +1,7 @@
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { join, relative, resolve, sep } from 'node:path'
-import { siteToken } from './site-token.js'
+import { analyticsSource, analyticsTag, stripAnalytics } from './analytics.js'
 
-const beaconSource = 'https://static.cloudflareinsights.com/beacon.min.js'
-const beaconTag = `<script defer src="${beaconSource}" data-cf-beacon='${JSON.stringify({ token: siteToken })}'></script>`
-const beaconPattern = /<script\b(?=[^>]*\bsrc\s*=\s*["']https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js["'])[^>]*>\s*<\/script>\s*/gi
 const escapeAttribute = value => String(value).replaceAll('&', '&amp;').replaceAll('\"', '&quot;').replaceAll('<', '&lt;')
 const excluded = new Set(['.git', '.github', '.book-dist', 'node_modules', 'tools', 'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'book.json'])
 
@@ -41,7 +38,7 @@ export async function buildBook(directory = '.') {
       const url = page === 'index.html' ? `${origin}/` : `${origin}/${page}`
       const title = original.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || book.title
       const description = original.match(/<meta\b[^>]*\bname=[\"']description[\"'][^>]*\bcontent=[\"']([^\"']*)[\"'][^>]*>/i)?.[1] || book.description
-      let html = original.replace(beaconPattern, '')
+      let html = stripAnalytics(original)
       const additions = []
       const canonical = html.match(/<link\b[^>]*\brel=[\"']canonical[\"'][^>]*\bhref=[\"']([^\"']+)[\"'][^>]*>/i)?.[1]
       if (canonical && canonical !== url) throw new Error(`Canonical ${canonical} differs from ${url}`)
@@ -63,10 +60,10 @@ export async function buildBook(directory = '.') {
       if (!/<script\b[^>]*\btype=[\"']application\/ld\+json[\"']/i.test(html)) {
         additions.push(`<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': page === 'index.html' ? 'Book' : 'Chapter', name: title, description, url, inLanguage: 'ko', isAccessibleForFree: true })}</script>`)
       }
-      additions.push(beaconTag)
+      additions.push(analyticsTag)
       const result = html.replace(/<\/head>/i, `${additions.join('\n')}\n</head>`)
-      if ((result.match(/static\.cloudflareinsights\.com\/beacon\.min\.js/g) || []).length !== 1) {
-        throw new Error(`Expected one analytics beacon: ${relative(output, path)}`)
+      if (result.split(analyticsSource).length !== 2 || result.includes('static.cloudflareinsights.com/beacon.min.js')) {
+        throw new Error(`Expected one GA4 tag: ${relative(output, path)}`)
       }
       await writeFile(path, result)
       pages++

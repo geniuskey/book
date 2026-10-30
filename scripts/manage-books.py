@@ -76,8 +76,8 @@ for repo in selected:
                 request = Request(f'https://{domain}{path}?book-check=1', headers={'Cache-Control': 'no-cache'})
                 with urlopen(request, timeout=15) as response:
                     html = response.read().decode('utf-8')
-                if html.count('cloudflareinsights.com/beacon.min.js') != 1 or '<script defer src="https://static.cloudflareinsights.com/beacon.min.js"' not in html:
-                    raise ValueError(f'analytics beacon mismatch at {path}')
+                if html.count('https://www.googletagmanager.com/gtag/js?id=G-LST8C5WL08') != 1 or 'static.cloudflareinsights.com/beacon.min.js' in html:
+                    raise ValueError(f'GA4 tag mismatch at {path}')
             print(f'[{repo.name}] LIVE OK')
         except Exception as error:
             failed.append(repo.name)

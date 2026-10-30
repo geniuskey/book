@@ -1,6 +1,6 @@
 {
   "name": "@euiyun/book",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "Build and check independent static Euiyun books",
@@ -8,7 +8,8 @@
     "euiyun-book": "./bin/book.js"
   },
   "exports": {
-    ".": "./src/build.js"
+    ".": "./src/build.js",
+    "./analytics": "./src/analytics.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js",
