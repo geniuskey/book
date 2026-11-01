@@ -10,7 +10,7 @@
 - 누락된 canonical, OpenGraph, Twitter card, 기본 JSON-LD, favicon 메타 채움
 - 없을 때 sitemap과 robots.txt 생성
 - 기존 CSS, JavaScript, 시뮬레이터, 고유 SEO 메타, 자산, URL 유지
-- 모든 책이 같은 상단 바를 쓰는 runtime(`runtime/topbar.js`, `runtime/topbar.css`, [아키텍처](docs/ARCHITECTURE.md#공통-ui-runtime))
+- 모든 책이 같은 상단 바·챕터 서랍·이전/다음·푸터를 쓰는 runtime(`runtime/ui.js`, `runtime/ui.css`, [아키텍처](docs/ARCHITECTURE.md#공통-ui-runtime))
 - 공개된 모든 책의 모바일 홈·시뮬레이터 진입점과 대표 3권의 실제 조작을 검사하는 Playwright suite
 
 ## 새 책
@@ -26,6 +26,6 @@ npm ci
 npm run build
 ```
 
-현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.2.0`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
+현재 패키지는 npm에 게시하지 않았다. 별도 저장소에서도 재현 가능한 Git tag `v0.3.0`으로 설치한다. 태그 갱신은 하지 않고 새 버전을 출시해 각 책의 의존성과 lockfile을 갱신한다.
 
 [아키텍처](docs/ARCHITECTURE.md) · [집필](docs/BOOK_AUTHORING.md) · [운영](docs/OPERATIONS.md) · [이전](docs/MIGRATION.md) · [Analytics](docs/ANALYTICS.md) · [감사 결과](docs/ECOSYSTEM_AUDIT.md)

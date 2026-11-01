@@ -1,6 +1,6 @@
 {
   "name": "@euiyun/book",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Build and check independent static Euiyun books",
@@ -10,8 +10,8 @@
   "exports": {
     ".": "./src/build.js",
     "./analytics": "./src/analytics.js",
-    "./runtime/topbar.js": "./runtime/topbar.js",
-    "./runtime/topbar.css": "./runtime/topbar.css"
+    "./runtime/ui.js": "./runtime/ui.js",
+    "./runtime/ui.css": "./runtime/ui.css"
   },
   "scripts": {
     "test": "node --test test/*.test.js",
