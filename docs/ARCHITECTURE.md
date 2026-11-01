@@ -1,10 +1,39 @@
 # Book architecture
 
 - `geniuskey/books`: 책 catalog, 분야, 학습 경로, 실험 탐색을 소유하는 포털.
-- `geniuskey/book`: 기존 정적 HTML을 빌드·검사하고 공통 SEO/Analytics 기본값을 제공하는 엔진.
-- `geniuskey/*book`: 독립 콘텐츠, 디자인, nav, CSS, 시뮬레이터, 도메인, Pages 배포.
+- `geniuskey/book`: 기존 정적 HTML을 빌드·검사하고 공통 SEO/Analytics 기본값과 공통 UI runtime(상단 바)을 제공하는 엔진.
+- `geniuskey/*book`: 독립 콘텐츠, 디자인, 챕터 목록·서랍, CSS, 시뮬레이터, 도메인, Pages 배포.
 
-현재 책들은 정적 HTML이다. 각 책의 `js/common.js`도 nav 데이터와 책별 수학/시뮬레이션 helper가 섞여 있어 통째로 합치지 않는다. 먼저 새 책과 기존 책의 빌드/검사/배포만 일관되게 한다. 반복되는 UI가 명확히 분리될 때 작은 공통 runtime을 추가한다.
+현재 책들은 정적 HTML이다. 각 책의 `js/common.js`도 nav 데이터와 책별 수학/시뮬레이션 helper가 섞여 있어 통째로 합치지 않는다. 먼저 새 책과 기존 책의 빌드/검사/배포를 일관되게 하고, 반복되는 UI는 분리되는 대로 작은 공통 runtime으로 옮긴다.
+
+## 공통 UI runtime
+
+첫 runtime은 상단 바다(`runtime/topbar.js`, `runtime/topbar.css`, v0.2.0). 모든 책이 같은 순서와 반응형 규칙을 쓴다.
+
+```
+[☰] [로고 · 책 이름 · 부제]   [검색]   [책 고유 버튼 0~2개] [서가] [의견] [테마]
+태블릿(≤760px): 로고는 마크만, 버튼은 아이콘만
+모바일(≤600px): [☰] [검색] [mobile: true인 고유 버튼 1개] [의견] [테마] (서가는 440px 이하에서 서랍으로)
+```
+
+- 서가 링크는 하나다. 단독 책은 books.euiyun.com(전체 책), 시리즈 책은 시리즈가 `EuiyunBook.shelf = { href, label, title }`로 바꾼다(예: semi-books `shared/js/book-shell.js`).
+- 검색은 필수다. 챕터 메타데이터를 바로 찾고, 챕터 페이지의 `main.chapter` 섹션(`section > h2`)·시뮬레이터(`.sim .sim-head h3`)·그림(`figure figcaption`)은 처음 검색할 때 읽는다.
+- 책 고유 버튼은 `actions`로만 넣는다. 서가·의견·테마 앞에 놓인다.
+- 클래스는 `bk-` 하나로 통일한다. 색과 크기는 책의 `--bg`, `--bg-elev`, `--text*`, `--border`, `--accent*`, `--shadow`, `--nav-h` 변수를 따른다.
+
+책은 `js/common.js`의 layout 코드에서 호출한다. 챕터 목록 데이터, 서랍, 테마 적용 방식은 책에 남는다.
+
+```js
+const { bar } = EuiyunBook.topbar({
+  name: "DeviceBook", subtitle: "반도체 소자 물리 교과서", logo: LOGO_SVG, home: href(""),
+  chapters: CHAPTERS, chapterHref: href, feedback: "devicebook",
+  actions: [{ id: "x-gallery", href: "sims.html", icon: ICON, label: "시뮬레이터", title: "시뮬레이터 갤러리", mobile: false }],
+  theme: { isDark: () => isDark(), set: (next) => { localStorage.setItem("theme", next); applyTheme(next); } },
+  onMenu: () => openDrawer(),
+});
+```
+
+페이지는 runtime을 책의 `common.js`보다 늦지 않게 불러온다(`defer`면 DOMContentLoaded 전에 실행된다). 정적 사이트는 패키지 파일을 저장소에 복사해 두고, 복사본이 설치된 버전과 같은지 테스트로 확인한다.
 
 ## Metadata와 registry
 
