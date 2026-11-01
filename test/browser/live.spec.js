@@ -1,13 +1,7 @@
 import { expect, test } from '@playwright/test';
+import { simulatorUrlFor } from './discovery.js';
 
 const portal = process.env.BOOK_PORTAL_URL || 'https://books.euiyun.com';
-const fallbackExperiments = {
-  chipindustrybook: '/chapters/business.html#sim-bm-map',
-  colorbook: '/chapters/colorimetry.html#sim-match',
-  etchbook: '/chapters/ale.html#sim-cyc',
-  moneybook: '/chapters/behavior.html#sim-value',
-  stockbook: '/chapters/backtest.html#sim-engine',
-};
 
 function trackPageErrors(page) {
   const errors = [];
@@ -43,8 +37,7 @@ test('published books load on mobile and expose a working simulator page', async
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         expect.soft(overflow, `${book.id} mobile horizontal overflow (px)`).toBeLessThanOrEqual(2);
 
-        const entry = discovery.experiments.find(item => item.bookId === book.id);
-        const simulatorUrl = entry?.url || (fallbackExperiments[book.id] && new URL(fallbackExperiments[book.id], book.url).href);
+        const simulatorUrl = simulatorUrlFor(book, discovery);
         expect(simulatorUrl, `${book.id} simulator URL`).toBeTruthy();
         if (simulatorUrl) {
           const chapter = await page.goto(simulatorUrl, { waitUntil: 'domcontentloaded' });

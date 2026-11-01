@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'test/browser/**'
+      - 'test/**'
       - 'playwright.config.js'
       - 'package.json'
       - 'package-lock.json'
@@ -24,6 +24,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - uses: actions/upload-artifact@v4
