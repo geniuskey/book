@@ -8,7 +8,7 @@
 
 ## 공통 UI runtime
 
-`runtime/ui.js`, `runtime/ui.css`(v0.3.0)는 모든 책이 같은 순서와 반응형 규칙으로 쓰는 상단 바·챕터 서랍·이전/다음·푸터다. v0.2.0의 `runtime/topbar.*`를 대신한다.
+`runtime/ui.js`, `runtime/ui.css`(v0.4.0)는 모든 책이 같은 순서와 반응형 규칙으로 쓰는 상단 바·챕터 서랍·이전/다음·푸터다. v0.2.0의 `runtime/topbar.*`를 대신한다.
 
 ```
 상단 바   [☰] [로고 · 책 이름 · 부제]   [검색]   [책 고유 버튼 0~2개] [서가] [의견] [테마]
@@ -23,6 +23,8 @@
 
 - 서가 링크는 상단 바와 서랍에 하나씩이다. 단독 책은 books.euiyun.com(전체 책), 시리즈 책은 시리즈가 `EuiyunBook.shelf = { href, label, title, back }`으로 바꾼다(예: semi-books `shared/js/book-shell.js`).
 - 검색은 필수다. 챕터 메타데이터를 바로 찾고, 챕터 페이지의 `main.chapter` 섹션(`section > h2`)·시뮬레이터(`.sim .sim-head h3`)·그림(`figure figcaption`)은 처음 검색할 때 읽는다.
+- 시리즈는 `EuiyunBook.search = { placeholder, label, load, run, idle }`로 검색을 통째로 바꿀 수 있다(예: semi-books는 빌드 때 만든 책별 본문·용어 색인으로 찾는다). `run(query)`는 `{ items: [{ href, type, title, meta, text }], note, footer }`를 돌려주고, `load()`가 끝나면 다시 불린다. `/`·Cmd/Ctrl+K는 어느 쪽이든 검색창으로 간다.
+- 시리즈 공통 서랍 항목은 `EuiyunBook.drawerExtra = [{ href, num, label, active }]`로 넣는다. 책의 `extra` 뒤에 붙는다(예: semi-books의 찾아보기).
 - 책 고유 버튼은 상단 바 `actions`, 서랍 `extra`로만 넣는다. 다른 책 소개는 서랍이 아니라 푸터 `related`에 둔다.
 - 라이선스 링크는 책 폴더의 `LICENSE-MIT`, `LICENSE.md`다(`root`). 독자 의견 링크는 누른 순간의 페이지 주소를 넘긴다.
 - 클래스는 `bk-` 하나로 통일한다. 색과 크기는 책의 `--bg`, `--bg-elev`, `--surface`, `--text*`, `--border`, `--accent*`, `--shadow`, `--mono`, `--radius`, `--maxw`, `--nav-h` 변수를 따른다.

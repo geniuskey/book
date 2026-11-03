@@ -26,3 +26,9 @@ test('ui stylesheet covers the standard parts and breakpoints', () => {
     assert.ok(source.includes(name), name)
   }
 })
+
+test('a series can replace the search and add drawer entries', () => {
+  assert.ok(source.includes('NS.search') && source.includes('wireProvider'), 'search provider hook')
+  assert.ok(source.includes('NS.drawerExtra'), 'series drawer entries')
+  for (const selector of ['.bk-sr-type', '.bk-sr-text', '.bk-sr-foot', '.bk-search-results mark']) assert.ok(css.includes(selector), selector)
+})
