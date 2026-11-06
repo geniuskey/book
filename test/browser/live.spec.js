@@ -88,7 +88,7 @@ test('AIBook lookup temperature presets change entropy', async ({ page }) => {
 
 test('ColorBook matching control solves and resets a color match', async ({ page }) => {
   const errors = trackPageErrors(page);
-  await page.goto('https://colorbook.euiyun.com/chapters/colorimetry.html#sim-match');
+  await page.goto('https://science.euiyun.com/color/chapters/colorimetry.html#sim-match');
   const difference = page.locator('#o-m-duv');
   await expect(difference).not.toHaveText('—');
   await page.locator('#m-solve').click();
