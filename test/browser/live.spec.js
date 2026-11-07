@@ -75,7 +75,7 @@ test('ProcessBook cleanroom control updates particle allowance', async ({ page }
 
 test('AIBook lookup temperature presets change entropy', async ({ page }) => {
   const errors = trackPageErrors(page);
-  await page.goto('https://aibook.euiyun.com/chapters/attention.html#sim-lookup');
+  await page.goto('https://computing.euiyun.com/ai/chapters/attention.html#sim-lookup');
   const entropy = page.locator('#lk-ent');
   await expect(entropy).not.toHaveText('—');
   await page.locator('#lk-hard').click();
