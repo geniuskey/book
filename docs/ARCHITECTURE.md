@@ -8,7 +8,7 @@
 
 ## 공통 UI runtime
 
-`runtime/ui.js`, `runtime/ui.css`(v0.4.0)는 모든 책이 같은 순서와 반응형 규칙으로 쓰는 상단 바·챕터 서랍·이전/다음·푸터다. v0.2.0의 `runtime/topbar.*`를 대신한다.
+`runtime/ui.js`, `runtime/ui.css`(v0.4.0)는 모든 책이 같은 순서와 반응형 규칙으로 쓰는 상단 바·챕터 서랍·이전/다음·푸터다. v0.2.0의 `runtime/topbar.*`를 대신한다. `runtime/experiments.js`(v0.5.0)는 책마다 선택해 켜는 실험 조작 이벤트다([Analytics](ANALYTICS.md#실험-이벤트)).
 
 ```
 상단 바   [☰] [로고 · 책 이름 · 부제]   [검색]   [책 고유 버튼 0~2개] [서가] [의견] [테마]
