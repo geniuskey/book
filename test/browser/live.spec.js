@@ -54,12 +54,14 @@ test.describe('published book', () => {
         const simulator = page.locator(`[id="${id}"]`);
         await expect(simulator, `${book.id} simulator anchor`).toHaveCount(1);
         // Scroll with the DOM API: Playwright's scrollIntoViewIfNeeded waits for the element to be
-        // "stable", which heavy, still-settling simulator pages (phonebook, camerabook) never reach
-        // on slow CI runners. Re-resolve the locator each attempt in case the section re-renders.
+        // "stable", which animated simulators never reach. Once on screen, three.js simulators
+        // (phonebook, camerabook) render every frame in software WebGL on GPU-less CI runners and
+        // keep the main thread busy, so each call can take seconds; give single calls room.
+        // Re-resolve the locator each attempt in case the section re-renders.
         await expect(async () => {
-          await simulator.evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }), null, { timeout: 2_000 });
-          await expect(simulator).toBeVisible({ timeout: 2_000 });
-        }, `${book.id} simulator visibility`).toPass({ timeout: 20_000 });
+          await simulator.evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }), null, { timeout: 10_000 });
+          await expect(simulator).toBeVisible({ timeout: 10_000 });
+        }, `${book.id} simulator visibility`).toPass({ timeout: 30_000 });
         expect.soft(await simulator.locator('canvas, input, button, select').count(), `${book.id} simulator controls`).toBeGreaterThan(0);
         expect.soft(errors, `${book.id} JavaScript errors`).toEqual([]);
       } finally {
