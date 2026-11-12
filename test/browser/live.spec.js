@@ -31,7 +31,8 @@ test('portal catalog lists the published books', () => {
 });
 
 test.describe('published book', () => {
-  test.describe.configure({ mode: 'parallel' });
+  // Some book pages take 8s+ to fire `load` locally and much longer on shared CI runners.
+  test.describe.configure({ mode: 'parallel', timeout: 90_000 });
 
   for (const book of published) {
     test(`${book.id} loads on mobile and exposes a working simulator page`, async ({ browser }) => {
@@ -52,12 +53,13 @@ test.describe('published book', () => {
         const id = new URL(simulatorUrl).hash.slice(1);
         const simulator = page.locator(`[id="${id}"]`);
         await expect(simulator, `${book.id} simulator anchor`).toHaveCount(1);
-        // Pages may re-render the section after load, so let the locator re-resolve instead of
-        // holding a handle that can detach.
+        // Scroll with the DOM API: Playwright's scrollIntoViewIfNeeded waits for the element to be
+        // "stable", which heavy, still-settling simulator pages (phonebook, camerabook) never reach
+        // on slow CI runners. Re-resolve the locator each attempt in case the section re-renders.
         await expect(async () => {
-          await simulator.scrollIntoViewIfNeeded({ timeout: 2_000 });
+          await simulator.evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }), null, { timeout: 2_000 });
           await expect(simulator).toBeVisible({ timeout: 2_000 });
-        }, `${book.id} simulator visibility`).toPass({ timeout: 15_000 });
+        }, `${book.id} simulator visibility`).toPass({ timeout: 20_000 });
         expect.soft(await simulator.locator('canvas, input, button, select').count(), `${book.id} simulator controls`).toBeGreaterThan(0);
         expect.soft(errors, `${book.id} JavaScript errors`).toEqual([]);
       } finally {
