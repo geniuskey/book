@@ -12,21 +12,29 @@ function trackPageErrors(page) {
   return errors;
 }
 
-test('published books load on mobile and expose a working simulator page', async ({ browser, request }) => {
-  test.setTimeout(240_000);
-  const [catalogResponse, discoveryResponse] = await Promise.all([
-    request.get(`${portal}/data/books.json`),
-    request.get(`${portal}/data/discovery.json`),
-  ]);
-  expect(catalogResponse.ok()).toBeTruthy();
-  expect(discoveryResponse.ok()).toBeTruthy();
-  const catalog = await catalogResponse.json();
-  const discovery = await discoveryResponse.json();
-  const published = catalog.books.filter(book => book.status === 'published');
+// Load the live catalog once at collection time so each book is its own test.
+// One test per book keeps the per-test timeout meaningful and lets workers run them in parallel.
+async function loadJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
+  return response.json();
+}
+
+const [catalog, discovery] = await Promise.all([
+  loadJson(`${portal}/data/books.json`),
+  loadJson(`${portal}/data/discovery.json`),
+]);
+const published = catalog.books.filter(book => book.status === 'published');
+
+test('portal catalog lists the published books', () => {
   expect(published.length).toBeGreaterThanOrEqual(22);
+});
+
+test.describe('published book', () => {
+  test.describe.configure({ mode: 'parallel' });
 
   for (const book of published) {
-    await test.step(book.id, async () => {
+    test(`${book.id} loads on mobile and exposes a working simulator page`, async ({ browser }) => {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
       const errors = trackPageErrors(page);
       try {
@@ -39,18 +47,18 @@ test('published books load on mobile and expose a working simulator page', async
 
         const simulatorUrl = simulatorUrlFor(book, discovery);
         expect(simulatorUrl, `${book.id} simulator URL`).toBeTruthy();
-        if (simulatorUrl) {
-          const chapter = await page.goto(simulatorUrl, { waitUntil: 'domcontentloaded' });
-          expect.soft(chapter?.status(), `${book.id} simulator HTTP status`).toBe(200);
-          const id = new URL(simulatorUrl).hash.slice(1);
-          const simulator = page.locator(`[id="${id}"]`);
-          await expect.soft(simulator, `${book.id} simulator anchor`).toHaveCount(1);
-          if (await simulator.count()) {
-            await simulator.scrollIntoViewIfNeeded();
-            await expect.soft(simulator, `${book.id} simulator visibility`).toBeVisible();
-            expect.soft(await simulator.locator('canvas, input, button, select').count(), `${book.id} simulator controls`).toBeGreaterThan(0);
-          }
-        }
+        const chapter = await page.goto(simulatorUrl, { waitUntil: 'load' });
+        expect.soft(chapter?.status(), `${book.id} simulator HTTP status`).toBe(200);
+        const id = new URL(simulatorUrl).hash.slice(1);
+        const simulator = page.locator(`[id="${id}"]`);
+        await expect(simulator, `${book.id} simulator anchor`).toHaveCount(1);
+        // Pages may re-render the section after load, so let the locator re-resolve instead of
+        // holding a handle that can detach.
+        await expect(async () => {
+          await simulator.scrollIntoViewIfNeeded({ timeout: 2_000 });
+          await expect(simulator).toBeVisible({ timeout: 2_000 });
+        }, `${book.id} simulator visibility`).toPass({ timeout: 15_000 });
+        expect.soft(await simulator.locator('canvas, input, button, select').count(), `${book.id} simulator controls`).toBeGreaterThan(0);
         expect.soft(errors, `${book.id} JavaScript errors`).toEqual([]);
       } finally {
         await page.close();
