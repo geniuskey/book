@@ -1,6 +1,6 @@
 {
   "name": "@euiyun/book",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "type": "module",
   "description": "Build and check independent static Euiyun books",

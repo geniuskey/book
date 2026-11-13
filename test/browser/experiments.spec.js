@@ -29,16 +29,19 @@ const events = (page) => page.evaluate(() => window.sent.map(({ name, experiment
 test('experiment events: one view per visible sim, start on first use, explore after three controls', async ({ page }) => {
   await open(page);
   await expect.poll(() => events(page)).toEqual(['experiment_view memorybook/dram-cell/sim-top']);
+  // Values set by script (a settings link) are not the reader's use.
+  await page.evaluate(() => { const r = document.getElementById('sim-top-a'); r.value = 70; r.dispatchEvent(new Event('input', { bubbles: true })); document.querySelector('#sim-top button').click(); });
+  expect(await events(page)).toEqual(['experiment_view memorybook/dram-cell/sim-top']);
 
-  await page.locator('#sim-top-a').fill('30');
-  await page.locator('#sim-top-a').fill('60');
+  await page.locator('#sim-top-a').press('ArrowRight');
+  await page.locator('#sim-top-a').press('ArrowRight');
   await page.locator('#sim-top button').first().click();
   expect(await events(page)).toEqual([
     'experiment_view memorybook/dram-cell/sim-top',
     'experiment_start memorybook/dram-cell/sim-top',
   ]);
   await page.locator('#sim-top canvas').click();
-  await page.locator('#sim-top-b').fill('10');
+  await page.locator('#sim-top-b').press('ArrowRight');
   await page.locator('#sim-top button').nth(1).click();
   const all = await events(page);
   expect(all.filter((e) => e.startsWith('experiment_explore'))).toEqual(['experiment_explore memorybook/dram-cell/sim-top']);
