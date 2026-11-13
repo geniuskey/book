@@ -8,7 +8,7 @@
 
 ## 공통 UI runtime
 
-`runtime/ui.js`, `runtime/ui.css`(v0.4.0)는 모든 책이 같은 순서와 반응형 규칙으로 쓰는 상단 바·챕터 서랍·이전/다음·푸터다. v0.2.0의 `runtime/topbar.*`를 대신한다. `runtime/experiments.js`(v0.5.0)는 책마다 선택해 켜는 실험 조작 이벤트다([Analytics](ANALYTICS.md#실험-이벤트)).
+`runtime/ui.js`, `runtime/ui.css`(v0.4.0)는 모든 책이 같은 순서와 반응형 규칙으로 쓰는 상단 바·챕터 서랍·이전/다음·푸터다. v0.2.0의 `runtime/topbar.*`를 대신한다. `runtime/experiments.js`(v0.5.0)는 책마다 선택해 켜는 실험 조작 이벤트다([Analytics](ANALYTICS.md#실험-이벤트)). `runtime/sim-state.js`(v0.6.0, 스타일은 `ui.css`)는 실험 머리에 ‘설정 링크’를 붙인다. 링크는 `<페이지>#<실험 id>?<조작 id>=<값>`이고 처음 값과 다른 조작만 담는다. 대상은 id가 있는 range·number·checkbox·radio·select와 `.seg[id]` 버튼이다. 받은 링크는 같은 이벤트로 값을 적용하고 ‘처음 값으로’를 제공한다. 실험에 `data-model` 버전을 두면 링크에 `_v`로 남고, 버전이 다르면 열되 모델이 바뀌었다고 알린다. 난수를 쓰는 실험은 같은 설정이어도 결과가 달라지므로 실험 쪽에서 시드를 고정해야 그대로 재현된다.
 
 ```
 상단 바   [☰] [로고 · 책 이름 · 부제]   [검색]   [책 고유 버튼 0~2개] [서가] [의견] [테마]

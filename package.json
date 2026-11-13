@@ -1,6 +1,6 @@
 {
   "name": "@euiyun/book",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "description": "Build and check independent static Euiyun books",
@@ -12,7 +12,8 @@
     "./analytics": "./src/analytics.js",
     "./runtime/ui.js": "./runtime/ui.js",
     "./runtime/ui.css": "./runtime/ui.css",
-    "./runtime/experiments.js": "./runtime/experiments.js"
+    "./runtime/experiments.js": "./runtime/experiments.js",
+    "./runtime/sim-state.js": "./runtime/sim-state.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js",
